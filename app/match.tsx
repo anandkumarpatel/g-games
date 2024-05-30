@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import EmojiCard from './Card'
 import { Text } from 'react-native-paper'
 import { View } from 'react-native'
+import { useNavigation } from 'expo-router'
+import { router } from 'expo-router'
 
 type BaseCard = {
   img: string
@@ -36,7 +38,7 @@ const GameBoard: React.FC = () => {
   const [selectedCard1Id, setSelectedCard1] = useState<number | null>(null)
   const [selectedCard2Id, setSelectedCard2] = useState<number | null>(null)
   const [score, setScore] = useState(0)
-
+  const nav = useNavigation()
   const handleCardPress = (id: number) => {
     const isPaused = selectedCard1Id !== null && selectedCard2Id !== null
     if (isPaused) return
@@ -71,13 +73,17 @@ const GameBoard: React.FC = () => {
       setSelectedCard2(null)
     }, 1000)
   }
-
-  // Check for game completion (all cards matched)
   const isGameComplete = cards.every((card) => card.isMatched)
+
+  useEffect(() => {
+    if (isGameComplete) {
+      router.replace('/win')
+    }
+  }, [isGameComplete])
+  // Check for game completion (all cards matched)
   return (
     <View style={{ flex: 1 }}>
       <View style={{ justifyContent: 'center', alignContent: 'center', flexDirection: 'column' }}>
-        {isGameComplete && <Text style={{ fontSize: 24 }}>Congratulations! You won!</Text>}
         <View
           style={{
             flex: 1,

@@ -15,8 +15,7 @@ type Card = {
 
 type GameBoardProps = {
   baseCards: BaseCard[]
-  faceUp: boolean
-  selectedColor: string
+  faceUp?: boolean
 }
 const GameBoard: React.FC<GameBoardProps> = ({ baseCards, faceUp = false }) => {
   const newCards: Card[] = baseCards

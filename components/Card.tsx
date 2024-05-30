@@ -4,18 +4,14 @@ import { Card } from 'react-native-paper'
 
 type Input = {
   img: string
-  onPress: Function
+  onPress: () => void
   isMatched: boolean
   isFlipped: boolean
+  faceUp?: boolean
   color: string
 }
 
-const EmojiCard = ({ img, onPress, isMatched, isFlipped, color }: Input) => {
-  const handlePress = () => {
-    if (!isMatched && !isFlipped) {
-      onPress()
-    }
-  }
+const EmojiCard = ({ img, onPress, isMatched, isFlipped, color, faceUp = false }: Input) => {
   const size = {
     width: 250,
   }
@@ -25,9 +21,17 @@ const EmojiCard = ({ img, onPress, isMatched, isFlipped, color }: Input) => {
   if (isMatched) backgroundColor = 'green'
 
   return (
-    <TouchableOpacity style={size} onPress={handlePress}>
+    <TouchableOpacity style={size} onPress={onPress}>
       <Card style={{ backgroundColor, ...size, alignContent: 'center', justifyContent: 'center', alignItems: 'center' }}>
-        {isFlipped ? <Text style={{ fontSize: 100 }}>{img}</Text> : null}
+        {isFlipped || (faceUp && !isMatched) ? (
+          <Text
+            style={{
+              fontSize: 100,
+            }}
+          >
+            {img}
+          </Text>
+        ) : null}
       </Card>
     </TouchableOpacity>
   )

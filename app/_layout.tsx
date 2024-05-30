@@ -1,8 +1,8 @@
 import { Stack } from 'expo-router'
-import CustomNavigationBar from './AppBar'
+import CustomNavigationBar from '../components/AppBar'
+import { games } from '@/constants/types'
 
 export default function RootLayout() {
-  // return <Stack />
   return (
     <Stack
     // initialRouteName='index'
@@ -24,12 +24,15 @@ export default function RootLayout() {
           headerShown: false,
         }}
       />
-      <Stack.Screen
-        name='match'
-        options={{
-          title: 'Matching Game',
-        }}
-      />
+      {games.map((game, index) => (
+        <Stack.Screen
+          key={index}
+          name={game.pathName}
+          options={{
+            title: game.title,
+          }}
+        />
+      ))}
     </Stack>
   )
 }

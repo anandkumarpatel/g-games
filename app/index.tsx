@@ -1,20 +1,33 @@
-import { Link, useNavigation } from 'expo-router'
+import { games } from '@/constants/types'
+import { Link } from 'expo-router'
 import { View } from 'react-native'
 import { Button } from 'react-native-paper'
 
 export default function Index() {
-  const nav = useNavigation()
   return (
     <View
       style={{
         flex: 1,
+        gap: 25,
+        padding: 10,
         justifyContent: 'center',
-        alignItems: 'center',
       }}
     >
-      <Link href={{ pathname: 'match' }} asChild>
-        <Button mode='contained'>Play Matching Game</Button>
-      </Link>
+      {games.map((game, index) => (
+        <Link key={index} href={{ pathname: game.pathName }} asChild>
+          <Button
+            style={{
+              justifyContent: 'center',
+            }}
+            labelStyle={{
+              fontWeight: 'bold',
+            }}
+            mode='contained'
+          >
+            {game.navText}
+          </Button>
+        </Link>
+      ))}
     </View>
   )
 }

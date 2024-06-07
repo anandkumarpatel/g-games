@@ -1,23 +1,55 @@
 import GameBoard, { BaseCard } from '@/components/GameBoard'
 import React from 'react'
 
-const cardsInfo: BaseCard[] = [
-  { id: 1, img: '5 + 1', backgroundColor: 'yellow' },
-  { id: 1, img: '8 - 2', backgroundColor: 'yellow' },
-  { id: 2, img: '2 * 6', backgroundColor: 'yellow' },
-  { id: 2, img: '2 + 3', backgroundColor: 'yellow' },
-  { id: 3, img: '36 / 6', backgroundColor: 'yellow' },
-  { id: 3, img: '9 - 3', backgroundColor: 'yellow' },
-  { id: 4, img: '13 + 18', backgroundColor: 'yellow' },
-  { id: 4, img: '27 + 4', backgroundColor: 'yellow' },
-  { id: 5, img: '72 / 4', backgroundColor: 'yellow' },
-  { id: 5, img: '6 * 3', backgroundColor: 'yellow' },
-  { id: 6, img: '7 + 9', backgroundColor: 'yellow' },
-  { id: 6, img: '48 / 3', backgroundColor: 'yellow' },
-]
+const answersMap: Record<number, string[]> = generateAnswerMap()
 
 const MathMatch: React.FC = () => {
+  const cardsInfo: BaseCard[] = []
+  const picked = new Set()
+  for (let i = 0; i < 6; i++) {
+    const options = Object.keys(answersMap)
+    const selected = parseInt(options[Math.floor(Math.random() * options.length)])
+    if (picked.has(selected)) continue
+    picked.add(selected)
+    // pick two distinct and random options from selected
+    const [option1, option2] = answersMap[selected].sort(() => Math.random() - 0.5).slice(0, 2)
+    cardsInfo.push({ id: i, img: option1, backgroundColor: 'yellow' })
+    cardsInfo.push({ id: i, img: option2, backgroundColor: 'yellow' })
+  }
+
   return <GameBoard baseCards={cardsInfo} faceUp={true} />
 }
 
+function generateAnswerMap() {
+  const answersMap: Record<number, string[]> = {}
+  for (let i = 1; i < 10; i++) {
+    for (let j = 1; j < 10; j++) {
+      for (let op of ['+', '-', '*', '/']) {
+        let ans = 0
+        switch (op) {
+          case '+':
+            ans = i + j
+            break
+          case '-':
+            ans = i - j
+            break
+          case '*':
+            ans = i * j
+            break
+          case '/':
+            ans = i / j
+            if (!Number.isInteger(ans)) ans = 0
+            break
+        }
+        if (!ans) continue
+        if (!answersMap[ans]) answersMap[ans] = []
+        answersMap[ans].push(`${i} ${op} ${j}`)
+      }
+    }
+  }
+  for (let key in answersMap) {
+    if (answersMap[key].length < 2) delete answersMap[key]
+  }
+  return answersMap
+}
 export default MathMatch

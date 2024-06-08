@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Text, TouchableOpacity } from 'react-native'
+import React from 'react'
+import { Dimensions, Text, TouchableOpacity } from 'react-native'
 import { Card } from 'react-native-paper'
 
 type Input = {
@@ -12,10 +12,14 @@ type Input = {
 }
 
 const EmojiCard = ({ img, onPress, isMatched, isFlipped, color, faceUp = false }: Input) => {
+  const windowWidth = Dimensions.get('window').width
+  const windowHeight = Dimensions.get('window').height
+
   const size = {
-    width: 250,
+    width: windowWidth / 3 - 50,
+    height: windowHeight / 4 - 50,
   }
-  size.height = size.width
+
   let backgroundColor = 'white'
   if (isFlipped) backgroundColor = color
   if (isMatched) backgroundColor = 'green'

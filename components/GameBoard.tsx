@@ -34,7 +34,7 @@ const GameBoard: React.FC<GameBoardProps> = ({ baseCards, faceUp = false }) => {
   const handleCardPress = (index: number) => {
     const isPaused = selectedCard1Index !== null && selectedCard2Index !== null
     if (isPaused) return
-
+    if (index === selectedCard1Index) return
     if (selectedCard1Index === null) {
       setSelectedCard1(index)
     } else {

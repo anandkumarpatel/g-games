@@ -25,7 +25,7 @@ const EmojiCard = ({ img, onPress, isMatched, isFlipped, color, faceUp = false }
   if (isMatched) backgroundColor = 'green'
 
   return (
-    <TouchableOpacity style={size} onPress={onPress}>
+    <TouchableOpacity style={size} onPress={onPress} activeOpacity={0.5}>
       <Card style={{ backgroundColor, ...size, alignContent: 'center', justifyContent: 'center', alignItems: 'center' }}>
         {isFlipped || (faceUp && !isMatched) ? (
           <Text

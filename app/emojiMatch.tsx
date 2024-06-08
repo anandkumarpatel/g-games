@@ -3,7 +3,7 @@ import React from 'react'
 
 const emojiMatch: React.FC = () => {
   const cardsInfo = createCards()
-  return <GameBoard baseCards={cardsInfo} faceUp />
+  return <GameBoard baseCards={cardsInfo} />
 }
 
 function createCards() {

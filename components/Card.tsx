@@ -27,7 +27,7 @@ const FlipCard = ({ img, onPress, isMatched, isFlipped, color, faceUp = false }:
   const flipAnim = useRef(new Animated.Value(0)).current
   const flipToFront = () => {
     Animated.timing(flipAnim, {
-      toValue: 0,
+      toValue: 1,
       duration: 300,
       useNativeDriver: true,
     }).start()
@@ -35,7 +35,7 @@ const FlipCard = ({ img, onPress, isMatched, isFlipped, color, faceUp = false }:
 
   const flipToBack = () => {
     Animated.timing(flipAnim, {
-      toValue: 1,
+      toValue: 0,
       duration: 300,
       useNativeDriver: true,
     }).start()
@@ -49,7 +49,7 @@ const FlipCard = ({ img, onPress, isMatched, isFlipped, color, faceUp = false }:
     }
   }, [isFlipped])
 
-  const frontAnimatedStyle = {
+  const backAnimatedStyle_ = {
     transform: [
       {
         rotateY: flipAnim.interpolate({
@@ -60,7 +60,7 @@ const FlipCard = ({ img, onPress, isMatched, isFlipped, color, faceUp = false }:
     ],
   }
 
-  const backAnimatedStyle = {
+  const frontAnimatedStyle = {
     transform: [
       {
         rotateY: flipAnim.interpolate({
@@ -72,15 +72,15 @@ const FlipCard = ({ img, onPress, isMatched, isFlipped, color, faceUp = false }:
   }
 
   return (
-    <TouchableOpacity style={size} onPress={onPress} activeOpacity={0.5}>
+    <TouchableOpacity style={size} onPress={onPress} activeOpacity={0.5} disabled={isFlipped}>
+      <Animated.View style={[{ position: 'absolute', backfaceVisibility: 'hidden' }, backAnimatedStyle_, size]}>
+        <Card style={[[size, styles.card, isMatched && { visibility: 'hidden' }]]}>
+          <Text style={styles.image}>{faceUp && img}</Text>
+        </Card>
+      </Animated.View>
       <Animated.View style={[{ position: 'absolute', backfaceVisibility: 'hidden' }, frontAnimatedStyle, size]}>
         <Card style={[[size, styles.card, styles.flipped, { backgroundColor: color }]]}>
           <Text style={styles.image}>{img}</Text>
-        </Card>
-      </Animated.View>
-      <Animated.View style={[{ position: 'absolute', backfaceVisibility: 'hidden' }, backAnimatedStyle, size]}>
-        <Card style={[[size, styles.card, isMatched && { visibility: 'hidden' }]]}>
-          <Text style={styles.image}>{faceUp && img}</Text>
         </Card>
       </Animated.View>
     </TouchableOpacity>

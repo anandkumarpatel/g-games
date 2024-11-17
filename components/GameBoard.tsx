@@ -1,7 +1,7 @@
 import { router } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { View } from 'react-native'
-import EmojiCard from './Card'
+import FlipCard from './Card'
 import { styles } from './styles'
 
 export type BaseCard = {
@@ -76,7 +76,7 @@ const GameBoard: React.FC<GameBoardProps> = ({ baseCards, faceUp = false }) => {
     <View style={styles.container}>
       <View style={styles.cardContainer}>
         {cards.map((card, index) => (
-          <EmojiCard
+          <FlipCard
             color={card.backgroundColor}
             key={index}
             img={card.img}

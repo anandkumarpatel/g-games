@@ -12,7 +12,7 @@ type Input = {
   color: string
 }
 
-const EmojiCard = ({ img, onPress, isMatched, isFlipped, color, faceUp = false }: Input) => {
+const FlipCard = ({ img, onPress, isMatched, isFlipped, color, faceUp = false }: Input) => {
   const windowWidth = Dimensions.get('window').width
   const windowHeight = Dimensions.get('window').height
 
@@ -87,4 +87,4 @@ const EmojiCard = ({ img, onPress, isMatched, isFlipped, color, faceUp = false }
   )
 }
 
-export default EmojiCard
+export default FlipCard

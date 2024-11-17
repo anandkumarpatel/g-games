@@ -2,6 +2,7 @@ import { router } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { View } from 'react-native'
 import EmojiCard from './Card'
+import { styles } from './styles'
 
 export type BaseCard = {
   id: number
@@ -35,6 +36,8 @@ const GameBoard: React.FC<GameBoardProps> = ({ baseCards, faceUp = false }) => {
     const isPaused = selectedCard1Index !== null && selectedCard2Index !== null
     if (isPaused) return
     if (index === selectedCard1Index) return
+    if (cards[index].isMatched) return
+
     if (selectedCard1Index === null) {
       setSelectedCard1(index)
     } else {
@@ -70,31 +73,19 @@ const GameBoard: React.FC<GameBoardProps> = ({ baseCards, faceUp = false }) => {
   }, [isGameComplete])
   // Check for game completion (all cards matched)
   return (
-    <View style={{ flex: 1 }}>
-      <View style={{ justifyContent: 'center', alignContent: 'center', flexDirection: 'column' }}>
-        <View
-          style={{
-            flex: 1,
-            padding: 10,
-            flexDirection: 'row',
-            flexWrap: 'wrap',
-            gap: 10,
-            justifyContent: 'space-evenly',
-            alignSelf: 'center',
-          }}
-        >
-          {cards.map((card, index) => (
-            <EmojiCard
-              color={card.backgroundColor}
-              key={index}
-              img={card.img}
-              onPress={() => handleCardPress(index)}
-              isMatched={card.isMatched}
-              faceUp={faceUp}
-              isFlipped={selectedCard1Index === index || selectedCard2Index === index} // Pass isFlipped prop to control card visibility
-            />
-          ))}
-        </View>
+    <View style={styles.container}>
+      <View style={styles.cardContainer}>
+        {cards.map((card, index) => (
+          <EmojiCard
+            color={card.backgroundColor}
+            key={index}
+            img={card.img}
+            onPress={() => handleCardPress(index)}
+            isMatched={card.isMatched}
+            faceUp={faceUp}
+            isFlipped={selectedCard1Index === index || selectedCard2Index === index} // Pass isFlipped prop to control card visibility
+          />
+        ))}
       </View>
     </View>
   )

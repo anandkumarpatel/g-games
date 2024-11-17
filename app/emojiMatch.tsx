@@ -1,4 +1,5 @@
 import GameBoard from '@/components/GameBoard'
+import { styles } from '@/components/styles'
 import React from 'react'
 
 const emojiMatch: React.FC = () => {
@@ -14,7 +15,7 @@ function createCards() {
     if (emojisToUse.some((emoji) => emoji === randomEmoji || Math.abs(emoji.charCodeAt(0) - randomEmoji.charCodeAt(0)) < 20)) continue
     emojisToUse.push(randomEmoji)
   }
-  const init = emojisToUse.map((emoji, i) => ({ id: i, img: emoji, backgroundColor: 'white' }))
+  const init = emojisToUse.map((emoji, i) => ({ id: i, img: emoji, backgroundColor: styles.flipped.backgroundColor }))
   return init.concat(init)
 }
 

@@ -1,6 +1,7 @@
-import React from 'react'
-import { Dimensions, Text, TouchableOpacity } from 'react-native'
+import React, { useRef, useEffect } from 'react'
+import { Dimensions, Text, TouchableOpacity, Animated } from 'react-native'
 import { Card } from 'react-native-paper'
+import { styles } from './styles'
 
 type Input = {
   img: string
@@ -20,23 +21,68 @@ const EmojiCard = ({ img, onPress, isMatched, isFlipped, color, faceUp = false }
     height: windowHeight / 4 - 50,
   }
 
-  let backgroundColor = 'white'
+  let backgroundColor = '#ffffff'
   if (isFlipped) backgroundColor = color
-  if (isMatched) backgroundColor = 'green'
+
+  const flipAnim = useRef(new Animated.Value(0)).current
+  const flipToFront = () => {
+    Animated.timing(flipAnim, {
+      toValue: 0,
+      duration: 300,
+      useNativeDriver: true,
+    }).start()
+  }
+
+  const flipToBack = () => {
+    Animated.timing(flipAnim, {
+      toValue: 1,
+      duration: 300,
+      useNativeDriver: true,
+    }).start()
+  }
+
+  useEffect(() => {
+    if (isFlipped) {
+      flipToFront()
+    } else {
+      flipToBack()
+    }
+  }, [isFlipped])
+
+  const frontAnimatedStyle = {
+    transform: [
+      {
+        rotateY: flipAnim.interpolate({
+          inputRange: [0, 1],
+          outputRange: ['0deg', '180deg'],
+        }),
+      },
+    ],
+  }
+
+  const backAnimatedStyle = {
+    transform: [
+      {
+        rotateY: flipAnim.interpolate({
+          inputRange: [0, 1],
+          outputRange: ['180deg', '360deg'],
+        }),
+      },
+    ],
+  }
 
   return (
     <TouchableOpacity style={size} onPress={onPress} activeOpacity={0.5}>
-      <Card style={{ backgroundColor, ...size, alignContent: 'center', justifyContent: 'center', alignItems: 'center' }}>
-        {isFlipped || (faceUp && !isMatched) ? (
-          <Text
-            style={{
-              fontSize: 100,
-            }}
-          >
-            {img}
-          </Text>
-        ) : null}
-      </Card>
+      <Animated.View style={[{ position: 'absolute', backfaceVisibility: 'hidden' }, frontAnimatedStyle, size]}>
+        <Card style={[[size, styles.card, styles.flipped, { backgroundColor: color }]]}>
+          <Text style={styles.image}>{img}</Text>
+        </Card>
+      </Animated.View>
+      <Animated.View style={[{ position: 'absolute', backfaceVisibility: 'hidden' }, backAnimatedStyle, size]}>
+        <Card style={[[size, styles.card, isMatched && { visibility: 'hidden' }]]}>
+          <Text style={styles.image}>{faceUp && img}</Text>
+        </Card>
+      </Animated.View>
     </TouchableOpacity>
   )
 }
